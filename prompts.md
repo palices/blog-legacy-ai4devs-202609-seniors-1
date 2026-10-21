@@ -27,7 +27,7 @@ Si encuentras cualquier otro hallazgo que no se contemple en esta tabla, dejalo 
 
 ## Prompt 2
 
-**Auditoria adversarial con otro agente** **Modelo:** GPT 6.1 Sol **Herramienta:** Codex Tiempo: 3m
+**Auditoria adversarial con otro agente** **Modelo:** GPT 6.1 Sol **Herramienta:** Codex **Tiempo**: 3m
 
 ```markdown
 
@@ -50,3 +50,44 @@ Esta auditoria comparala con tu propio criterio contra la actual, llamada coment
 ```
 
 **Qué salió:** (opcional, una línea)  Mostró la tabla y datos complementarios comparándola con la auditoria previa indicando que encontró 4 que no fueron detectados con Opus y reflejandolo en el documento como PATCH
+
+
+
+## Prompt 3
+
+**Reordenación de la tabla** **Modelo:** Opus 5.5 **Herramienta:** Claude **Tiempo**: 1m 30s
+
+```markdown
+Reordena la tabla de hallazgos de `docs/auditoria/comentarios.md` con el criterio del mentor.
+No toques las demás secciones del archivo (revisión adversarial, «Otros hallazgos», Parte B).
+No modifiques código ni la BD; solo puedes hacer consultas de lectura (por ejemplo, `git log -S`).
+
+## Criterio
+1. **Primero la precedencia:** lo que abarata o desbloquea otro hallazgo va antes. Niveles:
+   - `C`: contención que corta el daño hoy.
+   - `N0`: precede a todo. Por ejemplo, los tests de caracterización, porque CLAUDE.md obliga a
+     escribirlos antes de corregir.
+   - `N1`: abarata o desbloquea otro hallazgo. Distingue "bloquea" (dependencia real) de
+     "abarata" (sin él se puede, pero cuesta más).
+   - `N2`: no desbloquea ninguno.
+2. **Dentro de cada nivel, daño ÷ radio**, de mayor a menor.
+   - Daño de 1 a 5, con la escala explicada encima de la tabla: 5 = pérdida irreversible o datos
+     personales expuestos hoy; 1 = latente, nadie lo nota.
+   - Radio = columna «Sitios a tocar», con recuentos reales. Si al revisar un recuento resulta
+     incorrecto, corrígelo y dilo.
+   - Cada fila empieza con `[nivel · daño/radio]`.
+3. **Si un hallazgo tiene el daño más alto y la precedencia más baja, pártelo en dos filas:**
+   - `Hna`: la contención que corta el daño hoy. Comprueba quién la notaría; por ejemplo, busca en
+     el frontend si alguien usa el endpoint que vas a retirar.
+   - `Hnb`: el arreglo de fondo, que espera su turno.
+4. **Las propuestas que nadie ha medido van fuera de la tabla,** en una sección «Propuestas sin
+   medir», cada una con lo que habría que medir al lado (logs de acceso, prueba concurrente en la
+   BD de test, `EXPLAIN QUERY PLAN`, volumen de spam…).
+
+## Se mantiene
+- Las 6 columnas de la tabla y el texto de cada hallazgo, salvo correcciones comprobadas.
+
+```
+
+**Qué salió:** (opcional, una línea)  Mostró la tabla ordenada según los criterios mostrados.
+
