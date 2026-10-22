@@ -29,7 +29,7 @@ Si encuentras cualquier otro hallazgo que no se contemple en esta tabla, dejalo 
 
 **Auditoria adversarial con otro agente** **Modelo:** GPT 6.1 Sol **Herramienta:** Codex **Tiempo**: 3m  
 Se realiza una auditoria extra fuera de los requisitos del ejercicio a modo de comparar ambos resultados
-con otro agente/modelo.
+con otro agente/modelo usando el mismo prompt.
 
 ```markdown
 
